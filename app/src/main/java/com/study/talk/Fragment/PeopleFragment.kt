@@ -1,5 +1,7 @@
 package com.study.talk.Fragment
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 
@@ -18,6 +20,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.study.talk.R
+import com.study.talk.chat.MessageActivity
 import com.study.talk.model.UserModel
 
 
@@ -83,6 +86,14 @@ class PeopleFragment : Fragment() {
                 .into((holder as CustomViewHolder).imageView)
              holder.textView.text = userModels[position].userName
 
+            holder.itemView.setOnClickListener {
+                var intent=Intent(it.context,MessageActivity::class.java)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    var ActivityOptions =
+                        ActivityOptions.makeCustomAnimation(view!!.context, R.anim.fromright, R.anim.toright)
+                    startActivity(intent, ActivityOptions.toBundle())
+                }
+            }
 
         }
 
