@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -52,7 +53,7 @@ class SignupActivity : AppCompatActivity() {
 
 
         SignupActivity_button_signup.setOnClickListener {
-           if(signupActivity_edittext_email.text.toString()==null || SignupActivity_edittext_password.text.toString()==null|| SignupActivity_edittext_name.text.toString()==null){
+           if(signupActivity_edittext_email.text.toString()==null || SignupActivity_edittext_password.text.toString()==null|| SignupActivity_edittext_name.text.toString()==null||imageUri==null){
                return@setOnClickListener
             }
             var email :String=signupActivity_edittext_email.text.toString()
@@ -88,7 +89,12 @@ class SignupActivity : AppCompatActivity() {
                                 userModel.userName=SignupActivity_edittext_name.text.toString()
                                 userModel.profileImageUrl= downloadUri.toString()
 
-                                FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel)
+                                FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel).addOnSuccessListener(object : OnSuccessListener<Void> {
+                                    override fun onSuccess(p0: Void?) {
+                                        this@SignupActivity.finish()
+                                    }
+                                })
+
                             } else {
                                 // Handle failures
                                 // ...
