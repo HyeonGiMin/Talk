@@ -13,6 +13,7 @@ class ChatModel{
 
           var uid: String? = null
           var message: String? = null
+          var timestamp:Any? =null
       }
   }
 

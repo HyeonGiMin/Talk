@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.study.talk.Fragment.PeopleFragment
 import com.study.talk.R
 import com.study.talk.model.ChatModel
@@ -24,6 +23,8 @@ import com.study.talk.model.UserModel
 import kotlinx.android.synthetic.main.activity_message.*
 import kotlinx.android.synthetic.main.fragment_people.*
 import kotlinx.android.synthetic.main.item_message.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MessageActivity : AppCompatActivity() {
 
@@ -31,6 +32,7 @@ class MessageActivity : AppCompatActivity() {
     lateinit var uid: String;
     lateinit var destinatonUid: String
     var chatRoomUid: String? = null;
+    var simpleDataFormat:SimpleDateFormat= SimpleDateFormat("yyyy.MM.dd HH:mm")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,9 +59,15 @@ class MessageActivity : AppCompatActivity() {
                 val comment: ChatModel.Companion.Comment = ChatModel.Companion.Comment()
                 comment.uid = uid
                 comment.message = messageActivity_editText.text.toString()
+                comment.timestamp=ServerValue.TIMESTAMP
 
                 FirebaseDatabase.getInstance().reference.child("chatrooms").child(chatRoomUid!!).child("comments")
-                    .push().setValue(comment)
+                    .push().setValue(comment).addOnCompleteListener {
+                        messageActivity_editText.setText("")
+
+                    }
+
+
             }
         }
         checkChatRoom()
@@ -103,7 +111,7 @@ class MessageActivity : AppCompatActivity() {
 
         //덧글 가져오는 부분분
         var comments:MutableList<ChatModel.Companion.Comment>
-        var userModel:UserModel=UserModel()
+        var userModel:UserModel= UserModel()
 
         init {
 
@@ -135,7 +143,10 @@ class MessageActivity : AppCompatActivity() {
                     for(item in p0.children){
                         comments.add(item.getValue<ChatModel.Companion.Comment>(ChatModel.Companion.Comment::class.java) as ChatModel.Companion.Comment)
                     }
+                    //메시지가 갱신 시켜주는 메시지
                     notifyDataSetChanged()
+
+                    messageActivity_recyclerview.scrollToPosition(comments.size-1)
                 }
 
             })
@@ -148,19 +159,27 @@ class MessageActivity : AppCompatActivity() {
         override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
            var messageviewholder:MessageViewHolder=  (p0 as MessageViewHolder)
 
+            //내가 보냄 메시지
             if(comments.get(p1).uid.equals(uid)){
                 messageviewholder.textView_message.text = comments[p1].message
                 messageviewholder.textView_message.setBackgroundResource(R.drawable.rightbubble)
                 messageviewholder.LinearLayou_destination.visibility=View.INVISIBLE
-            }else{
+                messageviewholder.LinearLayout_main.gravity=Gravity.RIGHT
+            } else{  //상대방이 보낸 메시지
                 Glide.with(p0.itemView.context).load(userModel.profileImageUrl).apply(RequestOptions().circleCrop()).into(messageviewholder.imgaeView_profile)
                 messageviewholder.textView_name.text=userModel.userName
                 messageviewholder.LinearLayou_destination.visibility=View.VISIBLE
                 messageviewholder.textView_message.setBackgroundResource(R.drawable.leftbubble)
                 messageviewholder.textView_message.text=comments[p1].message
                 messageviewholder.textView_message.textSize=25f
+                messageviewholder.LinearLayout_main.gravity=Gravity.LEFT
             }
-
+            var unixTime=comments[p1].timestamp as Long
+            var date =Date(unixTime)
+            simpleDataFormat.timeZone= TimeZone.getTimeZone("Asia/Seoul")
+            var time=simpleDataFormat.format(date)
+            messageviewholder.textView_timestamp.text=time
+            
 
         }
 
@@ -174,13 +193,16 @@ class MessageActivity : AppCompatActivity() {
             var textView_name: TextView
             var imgaeView_profile:ImageView
            var LinearLayou_destination :LinearLayout
+            var LinearLayout_main:LinearLayout
+          var textView_timestamp:TextView
 
             init {
-                textView_message = view.findViewById(R.id.messageItem_textView_message) as TextView
-                textView_name=view.findViewById(R.id.messageItem_textView_name) as TextView
-                imgaeView_profile=view.findViewById(R.id.messageItem_imageview_profile) as ImageView
-                LinearLayou_destination=view.findViewById(R.id.messageItem_linearlayout_destination) as LinearLayout
-
+                textView_message = view.findViewById(R.id.messageItem_textView_message)
+                textView_name=view.findViewById(R.id.messageItem_textView_name)
+                imgaeView_profile=view.findViewById(R.id.messageItem_imageview_profile)
+                LinearLayou_destination=view.findViewById(R.id.messageItem_linearlayout_destination)
+                LinearLayout_main=view.findViewById(R.id.messageItem_linearlayout_main)
+                textView_timestamp=view.findViewById(R.id.messageItem_textView_timestamp)
             }
         }
     }
