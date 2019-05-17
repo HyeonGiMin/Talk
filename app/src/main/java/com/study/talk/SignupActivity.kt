@@ -64,7 +64,7 @@ class SignupActivity : AppCompatActivity() {
                 .addOnCompleteListener(this@SignupActivity,OnCompleteListener<AuthResult>(){
                     task ->
 
-                    var uid=task.result.user.uid
+                    var uid=task.result!!.user.uid
                     FirebaseStorage.getInstance().reference.child("userImages").child(uid).putFile(imageUri!!).addOnCompleteListener { task ->
                         val storageRef = FirebaseStorage.getInstance().reference.child("userImages").child(uid)
                         var urlTask=storageRef.putFile(imageUri!!).continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
