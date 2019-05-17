@@ -88,6 +88,7 @@ class SignupActivity : AppCompatActivity() {
                                 val downloadUri = task.result
                                 userModel.userName=SignupActivity_edittext_name.text.toString()
                                 userModel.profileImageUrl= downloadUri.toString()
+                                userModel.uid=FirebaseAuth.getInstance().currentUser!!.uid
 
                                 FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel).addOnSuccessListener(object : OnSuccessListener<Void> {
                                     override fun onSuccess(p0: Void?) {

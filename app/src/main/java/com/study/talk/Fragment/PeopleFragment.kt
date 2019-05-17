@@ -15,6 +15,7 @@ import java.util.ArrayList
 import android.support.v7.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -52,11 +53,18 @@ class PeopleFragment : Fragment() {
 
         init {
             userModels = ArrayList()
+            var myUid:String=FirebaseAuth.getInstance().currentUser!!.uid
             FirebaseDatabase.getInstance().reference.child("users").addValueEventListener(object : ValueEventListener {
                override fun onDataChange(dataSnapshot: DataSnapshot) {
                      userModels.clear()
                    for (snapshot in dataSnapshot.children) {
-                     userModels.add(snapshot.getValue(UserModel::class.java)!!)
+
+                       var userModel:UserModel?=snapshot.getValue(UserModel::class.java)
+
+                       if(userModel?.uid.equals(myUid)){
+                           continue
+                       }
+                       userModels.add(snapshot.getValue(UserModel::class.java)!!)
                      }
                       notifyDataSetChanged()
 //
@@ -88,6 +96,8 @@ class PeopleFragment : Fragment() {
 
             holder.itemView.setOnClickListener {
                 var intent=Intent(it.context,MessageActivity::class.java)
+                intent.putExtra("destinationuid",userModels[position].uid)
+
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     var ActivityOptions =
                         ActivityOptions.makeCustomAnimation(view!!.context, R.anim.fromright, R.anim.toright)
