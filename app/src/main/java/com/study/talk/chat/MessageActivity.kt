@@ -39,7 +39,7 @@ class MessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
         uid = FirebaseAuth.getInstance().currentUser!!.uid  //채팅을 요구하는 uid(단말기에 로그인된 uid
-        destinatonUid = intent.getStringExtra("destinationuid")  //채팅을 당하는 아이디
+        destinatonUid = intent.getStringExtra("destinationUid")  //채팅을 당하는 아이디
 
 
         messageActivity_button.setOnClickListener {
@@ -179,7 +179,7 @@ class MessageActivity : AppCompatActivity() {
             simpleDataFormat.timeZone= TimeZone.getTimeZone("Asia/Seoul")
             var time=simpleDataFormat.format(date)
             messageviewholder.textView_timestamp.text=time
-            
+
 
         }
 
@@ -205,6 +205,12 @@ class MessageActivity : AppCompatActivity() {
                 textView_timestamp=view.findViewById(R.id.messageItem_textView_timestamp)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        finish()
+        overridePendingTransition(R.anim.fromleft,R.anim.toright)
     }
 }
    /*

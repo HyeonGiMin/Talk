@@ -9,23 +9,36 @@
             android:id="@+id/chatitem_imageview"
              android:layout_margin="10dp"
             android:layout_height="50dp"/>
-    <LinearLayout
+    <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <TextView
                 android:id="@+id/chatitem_textview_title"
                 android:text="방 이름"
+                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         <TextView
                 android:id="@+id/chatitem_textview_lastmessage"
                 android:text="마지막 메시지"
+                android:textColor="@android:color/darker_gray"
+                android:layout_below="@+id/chatitem_textview_title"
                 android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/chatitem_textview_timestamp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:textSize="10dp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_alignParentRight="true"
+                android:text="2019.1.1 12:00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
