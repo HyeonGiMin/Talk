@@ -104,6 +104,9 @@ class PeopleFragment : Fragment() {
                     startActivity(intent, ActivityOptions.toBundle())
                 }
             }
+            if (userModels[position].comment != null) {
+                holder.textView_comment.text = userModels[position].comment
+            }
 
         }
 
@@ -114,10 +117,12 @@ class PeopleFragment : Fragment() {
         private inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var imageView: ImageView
             var textView: TextView
+            var textView_comment:TextView
 
             init {
-                imageView = view.findViewById(R.id.frienditem_imageview) as ImageView
-                textView = view.findViewById(R.id.frienditem_textview) as TextView
+                imageView = view.findViewById(R.id.frienditem_imageview)
+                textView = view.findViewById(R.id.frienditem_textview)
+                textView_comment=view.findViewById(R.id.frienditem_textview_comment)
             }
         }
     }

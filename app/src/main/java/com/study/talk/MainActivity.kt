@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
+import com.study.talk.Fragment.AccountFragment
 import com.study.talk.Fragment.ChatFregment
 import com.study.talk.Fragment.PeopleFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +28,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.action_chat -> {
                     supportFragmentManager.beginTransaction().replace(R.id.mainActivity_framelayout, ChatFregment()).commit()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.action_account -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.mainActivity_framelayout, AccountFragment()).commit()
                     return@OnNavigationItemSelectedListener true
                 }
             }

@@ -7,4 +7,5 @@ class UserModel{
     var profileImageUrl:String=""
     var uid:String=""
     var pushToken:String=""
+    var comment:String=""
 }
