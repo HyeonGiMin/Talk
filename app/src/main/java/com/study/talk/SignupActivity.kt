@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
@@ -65,6 +66,10 @@ class SignupActivity : AppCompatActivity() {
                     task ->
 
                     var uid=task.result!!.user.uid
+                    var userProfileChangeRequest = UserProfileChangeRequest.Builder().setDisplayName(SignupActivity_edittext_name.text.toString()).build()
+
+                    task.result!!.user.updateProfile((userProfileChangeRequest))
+
                     FirebaseStorage.getInstance().reference.child("userImages").child(uid).putFile(imageUri!!).addOnCompleteListener { task ->
                         val storageRef = FirebaseStorage.getInstance().reference.child("userImages").child(uid)
                         var urlTask=storageRef.putFile(imageUri!!).continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
@@ -90,7 +95,7 @@ class SignupActivity : AppCompatActivity() {
                                 userModel.profileImageUrl= downloadUri.toString()
                                 userModel.uid=FirebaseAuth.getInstance().currentUser!!.uid
 
-                                FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel).addOnSuccessListener(object : OnSuccessListener<Void> {
+                                FirebaseDatabase.getInstance().reference.child("users").child(uid).setValue(userModel).addOnSuccessListener(object : OnSuccessListener<Void> {
                                     override fun onSuccess(p0: Void?) {
                                         this@SignupActivity.finish()
                                     }

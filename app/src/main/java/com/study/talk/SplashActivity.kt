@@ -1,5 +1,8 @@
 package com.study.talk
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -18,6 +21,9 @@ class SplashActivity : AppCompatActivity() {
 
     var remoteConfig = FirebaseRemoteConfig.getInstance()
     lateinit var linearLayout: LinearLayout
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +53,9 @@ class SplashActivity : AppCompatActivity() {
                 }
                 displayMessage()
             }
+
+
+
 
     }
 

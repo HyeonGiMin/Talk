@@ -1,5 +1,8 @@
 package com.study.talk
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +22,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
+
+
 
         auth.signOut()
         var remoteConfig=FirebaseRemoteConfig.getInstance()
@@ -54,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
                 //로그아웃
             }
         }
+
+
 
     }
     fun loginEvent(){

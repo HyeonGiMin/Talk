@@ -96,7 +96,7 @@ class PeopleFragment : Fragment() {
 
             holder.itemView.setOnClickListener {
                 var intent=Intent(it.context,MessageActivity::class.java)
-                intent.putExtra("destinationuid",userModels[position].uid)
+                intent.putExtra("destinationUid",userModels[position].uid)
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     var ActivityOptions =

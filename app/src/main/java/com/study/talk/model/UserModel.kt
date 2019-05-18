@@ -6,4 +6,5 @@ class UserModel{
     var userName:String=""
     var profileImageUrl:String=""
     var uid:String=""
+    var pushToken:String=""
 }

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         var uid=FirebaseAuth.getInstance().currentUser!!.uid
         val token = FirebaseInstanceId.getInstance().token!!
         var map= HashMap<String,Any>()
-        map.put("pushToekn",token)
+        map.put("pushToken",token)
 
         FirebaseDatabase.getInstance().reference.child("users").child(uid).updateChildren(map)
 
